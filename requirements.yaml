@@ -11,7 +11,7 @@ dependencies:
   - libzlib=1.2.13=hcfcfb64_5
   - openssl=3.1.1=hcfcfb64_1
   - pip=23.2.1=pyhd8ed1ab_0
-  - python=3.11.4=h2628c8c_0_cpython
+  - python=3.16
   - setuptools=68.0.0=pyhd8ed1ab_0
   - tk=8.6.12=h8ffe710_0
   - tzdata=2023c=h71feb2d_0
