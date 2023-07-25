@@ -14,6 +14,7 @@ List is structured by tuples and lastly int with number of repeats
 """
 
 architecture_config = [
+    # Tuple is structured by (kernel_size, filters, stride, padding) 
     (7, 64, 2, 3),
     "M",
     (3, 192, 1, 1),
@@ -23,6 +24,7 @@ architecture_config = [
     (1, 256, 1, 0),
     (3, 512, 1, 1),
     "M",
+    # List is structured by tuples and lastly int with number of repeats
     [(1, 256, 1, 0), (3, 512, 1, 1), 4],
     (1, 512, 1, 0),
     (3, 1024, 1, 1),
@@ -41,7 +43,7 @@ class CNNBlock(nn.Module):
         self.conv = nn.Conv2d(in_channels, out_channels, bias=False, **kwargs)
         self.batchnorm = nn.BatchNorm2d(out_channels)
         self.leakyrelu = nn.LeakyReLU(0.1)
-        print('inside class')
+        # print('inside class')
 
     def forward(self, x):
         return self.leakyrelu(self.batchnorm(self.conv(x)))
@@ -118,3 +120,10 @@ class Yolov1(nn.Module):
             nn.LeakyReLU(0.1),
             nn.Linear(496, S * S * (C + B * 5)),
         )
+
+def test(S = 7, B = 2, C = 20):
+    model = Yolov1(split_size=S, num_boxes=B, num_classes=C)
+    x = torch.randn((2, 3, 448, 448))
+    print(model(x).shape)
+
+test()
