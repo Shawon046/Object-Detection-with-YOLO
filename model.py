@@ -4,7 +4,7 @@ with slight modification with added BatchNorm.
 """
 
 import torch
-import torch.nn as nn
+from torch import nn
 
 """ 
 Information about architecture config:
