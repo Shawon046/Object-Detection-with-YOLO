@@ -7,7 +7,7 @@ import torch
 import torchvision
 from torchvision import transforms as transforms
 from torch import optim as optim
-from torchvision import transforms.functional as FT
+import torchvision.transforms.functional as FT
 from tqdm import tqdm
 from torch.utils.data import DataLoader
 from model import Yolov1
@@ -30,12 +30,14 @@ torch.manual_seed(seed)
 # Hyperparameters etc. 
 LEARNING_RATE = 2e-5
 DEVICE = "cuda" if torch.cuda.is_available else "cpu"
+# print(DEVICE)
 BATCH_SIZE = 16 # 64 in original paper but I don't have that much vram, grad accum?
 WEIGHT_DECAY = 0
 EPOCHS = 1000
 NUM_WORKERS = 2
 PIN_MEMORY = True
-LOAD_MODEL = False
+# LOAD_MODEL = False
+LOAD_MODEL = True
 LOAD_MODEL_FILE = "overfit.pth.tar"
 IMG_DIR = "data/images"
 LABEL_DIR = "data/labels"
@@ -114,15 +116,15 @@ def main():
     )
 
     for epoch in range(EPOCHS):
-        # for x, y in train_loader:
-        #    x = x.to(DEVICE)
-        #    for idx in range(8):
-        #        bboxes = cellboxes_to_boxes(model(x))
-        #        bboxes = non_max_suppression(bboxes[idx], iou_threshold=0.5, threshold=0.4, box_format="midpoint")
-        #        plot_image(x[idx].permute(1,2,0).to("cpu"), bboxes)
+        for x, y in train_loader:
+           x = x.to(DEVICE)
+           for idx in range(8):
+               bboxes = cellboxes_to_boxes(model(x))
+               bboxes = non_max_suppression(bboxes[idx], iou_threshold=0.5, threshold=0.4, box_format="midpoint")
+               plot_image(x[idx].permute(1,2,0).to("cpu"), bboxes)
 
-        #    import sys
-        #    sys.exit()
+           import sys
+           sys.exit()
 
         pred_boxes, target_boxes = get_bboxes(
             train_loader, model, iou_threshold=0.5, threshold=0.4
@@ -133,14 +135,14 @@ def main():
         )
         print(f"Train mAP: {mean_avg_prec}")
 
-        #if mean_avg_prec > 0.9:
-        #    checkpoint = {
-        #        "state_dict": model.state_dict(),
-        #        "optimizer": optimizer.state_dict(),
-        #    }
-        #    save_checkpoint(checkpoint, filename=LOAD_MODEL_FILE)
-        #    import time
-        #    time.sleep(10)
+        if mean_avg_prec > 0.9:
+           checkpoint = {
+               "state_dict": model.state_dict(),
+               "optimizer": optimizer.state_dict(),
+           }
+           save_checkpoint(checkpoint, filename=LOAD_MODEL_FILE)
+           import time
+           time.sleep(10)
 
         train_fn(train_loader, model, optimizer, loss_fn)
 

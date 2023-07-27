@@ -36,3 +36,7 @@ Regression loss for center, dimension, and class probability <br>
 **VOC Dataset Loader** <br>
 Custom Dataset loader for VOC <br>
 The implementation restrict to ONE object per cell 
+
+
+**CUDA Installation With Conda** <br>
+conda install pytorch==1.8 torchvision torchaudio cudatoolkit==11.1.1 -c pytorch -c conda-forge
