@@ -115,7 +115,7 @@ class Yolov1(nn.Module):
 
         return nn.Sequential(
             nn.Flatten(),
-            nn.Linear(1024 * S * S, 496),
+            nn.Linear(1024 * S * S, 496), # should be 4096 instead of 496 
             nn.Dropout(0.0),
             nn.LeakyReLU(0.1),
             nn.Linear(496, S * S * (C + B * 5)),

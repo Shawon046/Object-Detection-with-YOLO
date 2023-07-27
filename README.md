@@ -6,15 +6,20 @@ Virtual environment Creation with Mamba:
 https://github.com/conda-forge/miniforge#mambaforge
 
 2. mamba create --name yolo_venv python=3.6
-create a virtual environment "yolo_venv" with python version 3.11
+create a virtual environment "yolo_venv" with python version 3.6
+
 3. mamba activate yolo_venv
 activate the environment
+
 4. pip install -r requirements.txt
 for installing dependencies
+
 5. mamba env export > requirements.yaml
 for exporting dependencies
+
 4. mamba env create -f requirements.yaml
-for using the requirement file in cross platform
+for using the requirement file in cross platform (from another pc)
+
 5. mamba deactivate yolo_venv
 deactivate the environment
 
