@@ -8,6 +8,11 @@ logs/
 # ignore folders
 # ignorning venv folder
 venv_yolo/
+data/images/
+data/labels/
+
+# CSV files
+*.csv
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
