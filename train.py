@@ -36,8 +36,10 @@ WEIGHT_DECAY = 0
 EPOCHS = 1000
 NUM_WORKERS = 2
 PIN_MEMORY = True
+# Since there is no already trained mdoel
 LOAD_MODEL = False
 # LOAD_MODEL = True
+# The model we are training on the 8 examples
 LOAD_MODEL_FILE = "overfit.pth.tar"
 IMG_DIR = "data/images"
 LABEL_DIR = "data/labels"
@@ -104,6 +106,7 @@ def main():
         "data/test.csv", transform=transform, img_dir=IMG_DIR, label_dir=LABEL_DIR,
     )
 
+    # For 100 examples 
     # train_loader = DataLoader(
     #     dataset=train_dataset,
     #     batch_size=BATCH_SIZE,
@@ -123,6 +126,7 @@ def main():
         drop_last=False,
     )
 
+    # not used
     test_loader = DataLoader(
         dataset=test_dataset,
         batch_size=BATCH_SIZE,
@@ -152,6 +156,7 @@ def main():
         )
         print(f"Epoch: {epoch} | Train mAP: {mean_avg_prec}")
 
+        # Criteria for saving the model
         if mean_avg_prec > 0.9:
            checkpoint = {
                "state_dict": model.state_dict(),
