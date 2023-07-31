@@ -14,6 +14,9 @@ data/labels/
 # CSV files
 *.csv
 
+# BIG FILE
+overfit.pth.tar
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
