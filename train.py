@@ -37,13 +37,16 @@ EPOCHS = 1000
 # EPOCHS = 100 # for saving the model faster
 NUM_WORKERS = 2
 PIN_MEMORY = True
+
 # # Since there is no already trained mdoel
 LOAD_MODEL = False
-# LOAD_MODEL = True
+
 # # The model we are training on the 8 examples
+# LOAD_MODEL = True
 # LOAD_MODEL_FILE = "overfit.pth.tar"
 
 # The model we are training on the 100 examples
+LOAD_MODEL = True
 LOAD_MODEL_FILE = "overfit_100.pth.tar"
 IMG_DIR = "data/images"
 LABEL_DIR = "data/labels"
@@ -143,15 +146,15 @@ def main():
     )
 
     for epoch in range(EPOCHS):
-        # for x, y in train_loader:
-        #    x = x.to(DEVICE)
-        #    for idx in range(8):
-        #        bboxes = cellboxes_to_boxes(model(x))
-        #        bboxes = non_max_suppression(bboxes[idx], iou_threshold=0.5, threshold=0.4, box_format="midpoint")
-        #        plot_image(x[idx].permute(1,2,0).to("cpu"), bboxes)
+        for x, y in train_loader:
+           x = x.to(DEVICE)
+           for idx in range(8):
+               bboxes = cellboxes_to_boxes(model(x))
+               bboxes = non_max_suppression(bboxes[idx], iou_threshold=0.5, threshold=0.4, box_format="midpoint")
+               plot_image(x[idx].permute(1,2,0).to("cpu"), bboxes)
 
-        #    import sys
-        #    sys.exit()
+           import sys
+           sys.exit()
 
         pred_boxes, target_boxes = get_bboxes(
             train_loader, model, iou_threshold=0.5, threshold=0.4
