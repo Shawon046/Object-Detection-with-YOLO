@@ -38,10 +38,13 @@ EPOCHS = 1000
 NUM_WORKERS = 2
 PIN_MEMORY = True
 # # Since there is no already trained mdoel
-# LOAD_MODEL = False
-LOAD_MODEL = True
-# The model we are training on the 8 examples
-LOAD_MODEL_FILE = "overfit.pth.tar"
+LOAD_MODEL = False
+# LOAD_MODEL = True
+# # The model we are training on the 8 examples
+# LOAD_MODEL_FILE = "overfit.pth.tar"
+
+# The model we are training on the 100 examples
+LOAD_MODEL_FILE = "overfit_100.pth.tar"
 IMG_DIR = "data/images"
 LABEL_DIR = "data/labels"
 
@@ -89,43 +92,45 @@ def main():
     if LOAD_MODEL:
         load_checkpoint(torch.load(LOAD_MODEL_FILE), model, optimizer)
 
-    train_dataset = VOCDataset(
-        "data/8examples.csv",
-        transform=transform,
-        img_dir=IMG_DIR,
-        label_dir=LABEL_DIR,
-    )
-
+    # # For 8 examples 
     # train_dataset = VOCDataset(
-    #     "data/100examples.csv",
+    #     "data/8examples.csv",
     #     transform=transform,
     #     img_dir=IMG_DIR,
     #     label_dir=LABEL_DIR,
     # )
+
+    # For 100 examples 
+    train_dataset = VOCDataset(
+        "data/100examples.csv",
+        transform=transform,
+        img_dir=IMG_DIR,
+        label_dir=LABEL_DIR,
+    )
 
     test_dataset = VOCDataset(
         "data/test.csv", transform=transform, img_dir=IMG_DIR, label_dir=LABEL_DIR,
     )
 
     # For 100 examples 
-    # train_loader = DataLoader(
-    #     dataset=train_dataset,
-    #     batch_size=BATCH_SIZE,
-    #     num_workers=NUM_WORKERS,
-    #     pin_memory=PIN_MEMORY,
-    #     shuffle=True,
-    #     drop_last=True,
-    # )
-
-    # for working with 8 examples
     train_loader = DataLoader(
         dataset=train_dataset,
         batch_size=BATCH_SIZE,
         num_workers=NUM_WORKERS,
         pin_memory=PIN_MEMORY,
         shuffle=True,
-        drop_last=False,
+        drop_last=True,
     )
+
+    # # for working with 8 examples
+    # train_loader = DataLoader(
+    #     dataset=train_dataset,
+    #     batch_size=BATCH_SIZE,
+    #     num_workers=NUM_WORKERS,
+    #     pin_memory=PIN_MEMORY,
+    #     shuffle=True,
+    #     drop_last=False,
+    # )
 
     # not used
     test_loader = DataLoader(
@@ -138,15 +143,15 @@ def main():
     )
 
     for epoch in range(EPOCHS):
-        for x, y in train_loader:
-           x = x.to(DEVICE)
-           for idx in range(8):
-               bboxes = cellboxes_to_boxes(model(x))
-               bboxes = non_max_suppression(bboxes[idx], iou_threshold=0.5, threshold=0.4, box_format="midpoint")
-               plot_image(x[idx].permute(1,2,0).to("cpu"), bboxes)
+        # for x, y in train_loader:
+        #    x = x.to(DEVICE)
+        #    for idx in range(8):
+        #        bboxes = cellboxes_to_boxes(model(x))
+        #        bboxes = non_max_suppression(bboxes[idx], iou_threshold=0.5, threshold=0.4, box_format="midpoint")
+        #        plot_image(x[idx].permute(1,2,0).to("cpu"), bboxes)
 
-           import sys
-           sys.exit()
+        #    import sys
+        #    sys.exit()
 
         pred_boxes, target_boxes = get_bboxes(
             train_loader, model, iou_threshold=0.5, threshold=0.4
